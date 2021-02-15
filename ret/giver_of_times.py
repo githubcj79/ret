@@ -26,7 +26,7 @@ def giver_of_times():
 
 def main():
     for time_ in giver_of_times():
-        logger.debug("time_ {time_}")
+        logger.debug(f"time_ {time_}")
 
 
 if __name__ == '__main__':
