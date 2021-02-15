@@ -7,6 +7,7 @@ from sqlalchemy import (
         Boolean,
         Column,
         DateTime,
+        Float,
         ForeignKey,
         Index,
         Integer,
@@ -26,23 +27,26 @@ BASE = declarative_base()
 class Overshooter(BASE):
     __tablename__ = 'overshooters'
     id = Column(Integer, primary_key=True)
-    date_time = Column(DateTime)
-    cell_name = Column(String(250), nullable=False)
-    time_advanced = Column(Integer, nullable=False)
-    average_distance = Column(Integer, nullable=False)
-    is_overshooter = Column(Boolean)
+    datetimeid = Column(DateTime)
+    cellname = Column(String(250), nullable=False)
+    ta_calculated = Column(Float, nullable=False)
+    average_distance = Column(Float, nullable=False)
+    overshooter = Column(Boolean)
+    intensity = Column(String(250), nullable=False)
     __table_args__ = (
-                        Index('my_index1', "date_time", "cell_name"),
-                        Index('my_index2', "date_time", "is_overshooter"),
-                     )
+                Index('my_index1', "datetimeid", "cellname"),
+                Index('my_index2', "datetimeid", "overshooter"),
+                Index('my_index3', "datetimeid", "overshooter", "intensity"),
+                )
 
     def __repr__(self):
         return (f"Overshooter(id[{self.id}],"
-                f"date_time[{self.date_time}],"
-                f"cell_name[{self.cell_name}],"
-                f"time_advanced[{self.time_advanced}],"
+                f"datetimeid[{self.datetimeid}],"
+                f"cellname[{self.cellname}],"
+                f"ta_calculated[{self.ta_calculated}],"
                 f"average_distance[{self.average_distance}],"
-                f"is_overshooter[{self.is_overshooter}])"
+                f"overshooter[{self.overshooter}],"
+                f"intensity[{self.intensity}])"
                 )
 
 class Terrain(BASE):
