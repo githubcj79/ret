@@ -7,6 +7,7 @@ $ conda --version
 
 habituales
 ----------
+$ clear
 $ tree -a -I ".git|__pycache__|.gitignore" -L 3 -D
 
 probaré logoru
