@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from etilt.config.conf import (
-        DB_STR_CONNECTION,
-        ECHO,
-        logger,
-    )
+from loguru import logger
+
 from sqlalchemy import (
         Boolean,
         Column,
@@ -21,6 +18,8 @@ from sqlalchemy.orm import (
         relationship,
         sessionmaker,
     )
+
+from settings import ENV, ECHO, DB_STR_CONNECTION
 
 BASE = declarative_base()
 
