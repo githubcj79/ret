@@ -19,9 +19,10 @@ def giver_of_times():
                     datetime.datetime(2021, 1, 13, 10, 30, 0, 0),
                 ]
 
-    seconds = 2
+    seconds = 1
 
     for time_ in time_list:
+        time.sleep(seconds)
         yield time_
 
 def main():
