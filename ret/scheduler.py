@@ -23,12 +23,6 @@ def scheduler(time_=None):
 
     logger.debug(f"time_ {time_}")
 
-    # se debe ir a buscar a los que hacen overshooting (más recientes)
-    # (table overshooters)
-
-    # de los anteriores seleccionar a los q están en terreno plano
-    # (table terrains)
-
     # de los anteriores seleccionar a los q min < tilt < max
     # (table rets) <-- tilt más reciente
 
@@ -36,6 +30,7 @@ def scheduler(time_=None):
     session = get_session(engine=engine)
 
     # ---------------------------------------------------
+    # datetimeid más reciente de overshooters
     max_overshooter = session.query(func.max(Overshooter.datetimeid)).first()
     if not max_overshooter:
         logger.info('No overshooters')
@@ -43,6 +38,7 @@ def scheduler(time_=None):
         session.close()
         return
 
+    # datetimeid más reciente de terrains
     max_terrain = session.query(func.max(Terrain.datetimeid)).first()
     if not max_terrain:
         logger.info('No terrains')
@@ -50,12 +46,24 @@ def scheduler(time_=None):
         session.close()
         return
 
+    # datetimeid más reciente de terrains
+    max_ret = session.query(func.max(Ret.datetimeid)).first()
+    if not max_ret:
+        logger.info('No rets')
+        session.commit()
+        session.close()
+        return
+
     logger.info('--->')
 
-    q = session.query(Overshooter,Terrain).filter(and_(
+    # set más reciente de overshooters en terreno plano
+    q = session.query(Overshooter,Terrain,Ret).filter(and_(
             Overshooter.cellname == Terrain.cellname,
+            Terrain.cellname == Ret.cellname,
+            Terrain.is_plain,
             Overshooter.datetimeid == max_overshooter,
             Terrain.datetimeid == max_terrain,
+            Ret.datetimeid == max_ret,
         ))
 
     logger.info('<---')
