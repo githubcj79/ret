@@ -73,31 +73,32 @@ class Terrain(BASE):
 class Ret(BASE):
     __tablename__ = 'rets'
     id = Column(Integer, primary_key=True)
-    # dateid = Column(DateTime)
-    dateid = Column(String(128))
+    datetimeid = Column(DateTime)
     node = Column(String(128))
+    cellname = Column(String(250), nullable=False)
+    eci = Column(Integer)
     devicename = Column(String(128))
     deviceno = Column(Integer)
     tilt = Column(Integer)
     subname = Column(String(128))
     subunitno = Column(Integer)
     localcellid = Column(Integer)
-    eci = Column(Integer)
     __table_args__ = (
-                        Index('my_index1', "dateid", "node", "devicename"),
+                        Index('my_index1', "datetimeid", "node", "cellname"),
                      )
 
     def __repr__(self):
         return (f"Ret(id[{self.id}],"
-                f"dateid[{self.dateid}],"
+                f"datetimeid[{self.datetimeid}],"
                 f"node[{self.node}],"
+                f"cellname[{self.cellname}],"
+                f"eci[{self.eci}],"
                 f"devicename[{self.devicename}],"
                 f"deviceno[{self.deviceno}],"
                 f"tilt[{self.tilt}],"
                 f"subname[{self.subname}],"
                 f"subunitno[{self.subunitno}],"
-                f"localcellid[{self.localcellid},]"
-                f"eci[{self.eci}])"
+                f"localcellid[{self.localcellid}])"
                 )
 
 # ------------------------------------------------
