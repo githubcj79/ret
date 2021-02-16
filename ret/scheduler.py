@@ -43,8 +43,22 @@ def scheduler(time_=None):
         session.close()
         return
 
+    max_terrain = session.query(func.max(Terrain.datetimeid)).first()
+    if not max_terrain:
+        logger.info('No terrains')
+        session.commit()
+        session.close()
+        return
+
     logger.info('--->')
 
+    q = session.query(Overshooter,Terrain).filter(and_(
+            Overshooter.cellname == Terrain.cellname,
+            Overshooter.datetimeid == max_overshooter,
+            Terrain.datetimeid == max_terrain,
+        ))
+
+    logger.info('<---')
 
    #  datetimeid_latest_overshooter
 
