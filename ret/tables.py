@@ -52,22 +52,22 @@ class Overshooter(BASE):
 class Terrain(BASE):
     __tablename__ = 'terrains'
     id = Column(Integer, primary_key=True)
-    date_time = Column(DateTime)
-    cell_name = Column(String(250), nullable=False)
+    datetimeid = Column(DateTime)
+    cellname = Column(String(250), nullable=False)
     is_plain = Column(Boolean)
     slope = Column(Integer, nullable=False)
     __table_args__ = (
-                        Index('my_index1', "date_time", "cell_name"),
-                        Index('my_index2', "date_time", "is_plain"),
-                     )
+                Index('my_index1', "datetimeid", "cellname"),
+                Index('my_index2', "datetimeid", "is_plain"),
+                Index('my_index3', "datetimeid", "is_plain", "slope"),
+                )
 
     def __repr__(self):
         return (f"Terrain(id[{self.id}],"
-                f"date_time[{self.date_time}],"
-                f"cell_name[{self.cell_name}],"
-                f"time_advanced[{self.time_advanced}],"
-                f"average_distance[{self.average_distance}]",
-                f"is_plain[{self.is_plain}])"
+                f"datetimeid[{self.datetimeid}],"
+                f"cellname[{self.cellname}],"
+                f"is_plain[{self.is_plain}],"
+                f"slope[{self.slope}])"
                 )
 
 class Ret(BASE):
