@@ -12,3 +12,6 @@ def mid_term_evaluator(time_=None, candidates_df=pd.DataFrame()):
 
     if candidates_df.empty:
         return
+
+    for idx in candidates_df.index:
+        logger.debug(f"cellname {candidates_df['cellname'][idx]}")
