@@ -46,7 +46,7 @@ def scheduler(time_=None):
         session.close()
         return
 
-    # datetimeid más reciente de terrains
+    # datetimeid más reciente de rets
     max_ret = session.query(func.max(Ret.datetimeid)).first()
     if not max_ret:
         logger.info('No rets')
@@ -55,50 +55,68 @@ def scheduler(time_=None):
         return
 
     logger.info('--->')
-
     # set más reciente de overshooters en terreno plano
-    q = session.query(Overshooter,Terrain,Ret).filter(and_(
-            Overshooter.cellname == Terrain.cellname,
-            Terrain.cellname == Ret.cellname,
-            Terrain.is_plain,
-            Overshooter.datetimeid == max_overshooter,
-            Terrain.datetimeid == max_terrain,
-            Ret.datetimeid == max_ret,
-        ))
+    # records = session.query(Overshooter,Terrain,Ret).filter(and_(
+    #         Overshooter.cellname == Terrain.cellname,
+    #         Terrain.cellname == Ret.cellname,
+    #         Terrain.is_plain,
+    #         Overshooter.datetimeid == max_overshooter,
+    #         Terrain.datetimeid == max_terrain,
+    #         Ret.datetimeid == max_ret
+    #     )).all()
 
+    ''' bad ...
+    # Execute a SELECT query on JOINed tables
+    records = session.query(Ret).join(Overshooter, Ret.cellname == Overshooter.cellname).all()
+
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+
+    # Loop through results
+    for record in records:
+        record_object = {
+            'cellname': record.cellname,
+            'overshooters': []
+        }
+        for overshooter in record.overshooter:
+            overshooter = {
+                'overshooter_id': overshooter.id,
+            }
+            record_object['overshooters'].append(overshooter)
+            pp.pprint(record_object)
+        '''
+
+    ''' esto funciona ...
+    # Execute a SELECT query on JOINed tables
+    records = session.query(Ret).join(Overshooter, Ret.cellname == Overshooter.cellname).all()
+
+    for record in records:
+        print(record)
+    '''
+
+    # Execute a SELECT query on JOINed tables
+    records = session.query(Ret).join(Overshooter, Ret.cellname == Overshooter.cellname).all()
+
+    for record in records:
+        print(record)
+
+    ''' esto funciona ...
+    # Fetch all customer records
+    records = session.query(Ret).all()
+
+    # Loop over records
+    for record in records:
+        print(record)
+    '''
+
+    # for record in records:
+    #     logger.info('?')
+
+    # logger.debug(f'type q.all() {type(q.all())}')
+    # for row in q.all():
+    #     logger.debug(f'type row {type(row)}')
+    #     logger.debug(f'row {row}')
     logger.info('<---')
-
-   #  datetimeid_latest_overshooter
-
-   #          row = self.session.query(func.max(Tweet.status_id)).first()
-   #      if row is not None:
-   #          since_id = row[0] if row[0] is not None else 0
-   #      else:
-   #          since_id = 0
-
-
-   #  q = session.query(Overshooter,Terrain,Ret).filter(
-   #          Overshooter.)
-
-
-
-
-
-
-
-   #  exists = session.query(Transaction).filter(and_(
-   #                          Transaction.node==antenna.node,
-   #                          Transaction.cellname==antenna.cellname,
-   #                          Transaction.deviceno==antenna.deviceno,
-   #                              )
-   #                          ).first()
-
-   # from sqlalchemy_sample import session, User, Car
-
-   #  #On a single column
-   #  q = session.query(User, Car).filter(User.username==Car.owner_name)
-   #  for row in q:
-   #      print row
     # ---------------------------------------------------
 
     session.commit()
