@@ -21,10 +21,6 @@ from tables import (
         get_session,
     )
 
-# from settings import (
-#         DB_STR_CONNECTION,
-#     )
-
 def scheduler(time_=None):
     if not time_:
         return
@@ -38,6 +34,15 @@ def scheduler(time_=None):
                 select datetimeid, cellname, overshooter
                 from overshooters
                 where overshooter;
+            '''
+
+    query_ = '''
+            select o.cellname
+            from overshooters o, terrains t
+            where o.cellname = t.cellname
+                and o.overshooter and t.is_plain
+                and o.datetimeid = (select max(datetimeid) from overshooters)
+                and t.datetimeid = (select max(datetimeid) from terrains);
             '''
 
     df = pd.read_sql(query_, db_connection)
