@@ -5,6 +5,7 @@ from loguru import logger
 import pandas as pd
 
 from giver_of_times import giver_of_times
+from mid_term_evaluator import mid_term_evaluator
 
 from tables import (
         get_engine,
@@ -29,12 +30,12 @@ def scheduler(time_=None):
                 and t.datetimeid = (select max(datetimeid) from terrains);
             '''
 
-    df = pd.read_sql(query_, db_connection)
+    candidates_df = pd.read_sql(query_, db_connection)
     db_connection.close()
 
     # entregar los candidatos a mid_term_evaluator()
+    mid_term_evaluator(time_=time_, candidates_df=candidates_df)
 
-    return df
 
 def main():
     for time_ in giver_of_times():

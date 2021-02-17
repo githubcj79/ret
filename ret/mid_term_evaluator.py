@@ -2,19 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from loguru import logger
+import pandas as pd
 
-from giver_of_times import giver_of_times
-
-def mid_term_evaluator(time_=None):
+def mid_term_evaluator(time_=None, candidates_df=pd.DataFrame()):
     if not time_:
         return
 
     logger.debug(f"time_ {time_}")
 
-def main():
-    for time_ in giver_of_times():
-        mid_term_evaluator(time_)
-
-
-if __name__ == '__main__':
-    main()
+    if candidates_df.empty:
+        return
