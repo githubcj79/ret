@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+import pandas as pd
+
 from sqlalchemy import (
         func,
         and_,
     )
+
 from loguru import logger
 
 from giver_of_times import giver_of_times
@@ -17,7 +21,32 @@ from tables import (
         get_session,
     )
 
+# from settings import (
+#         DB_STR_CONNECTION,
+#     )
+
 def scheduler(time_=None):
+    if not time_:
+        return
+
+    logger.debug(f"time_ {time_}")
+
+    engine = get_engine()
+    db_connection = engine.connect()
+
+    query_ = '''
+                select datetimeid, cellname, overshooter
+                from overshooters
+                where overshooter;
+            '''
+
+    df = pd.read_sql(query_, db_connection)
+    db_connection.close()
+
+    return df
+
+
+def bad_scheduler(time_=None):
     if not time_:
         return
 
