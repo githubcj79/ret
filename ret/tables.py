@@ -20,7 +20,11 @@ from sqlalchemy.orm import (
         sessionmaker,
     )
 
-from settings import ENV, ECHO, DB_STR_CONNECTION
+from settings import (
+        ENV,
+        ECHO,
+        DB_STR_CONNECTION
+    )
 
 BASE = declarative_base()
 
@@ -101,7 +105,6 @@ class Ret(BASE):
                 f"localcellid[{self.localcellid}])"
                 )
 
-# ------------------------------------------------
 class Transaction(BASE):
     '''
     This is the class that supports the close looped anntenas transactions.
@@ -121,6 +124,8 @@ class Transaction(BASE):
     tilt = Column(Integer)
     oldtilt = Column(Integer)
     newtilt = Column(Integer)
+    user_thrp_dl = Column(Float, nullable=False) # initial value
+    traffic_dl = Column(Float, nullable=False) # initial value
     created = Column(DateTime)
     generation = Column(DateTime)
     sent = Column(DateTime)
@@ -146,7 +151,6 @@ class Transaction(BASE):
                 f"success[{self.success}],"
                 f"failure[{self.failure}])"
                 )
-# ------------------------------------------------
 
 def get_engine():
     logger.info(f'get_engine:')

@@ -1,5 +1,5 @@
 APP:
-  ENVIRONMENT: simu
+  ENVIRONMENT: sim
   DEBUG: True
   # Only accept True or False
 
