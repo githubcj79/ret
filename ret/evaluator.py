@@ -22,14 +22,19 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
 
     for idx in candidates_kpis_df.index:
         logger.debug(f"cellname {candidates_kpis_df['cellname'][idx]}")
+
+        # ------------- rule -------------
         user_avg = candidates_kpis_df['user_avg'][idx]
-        if not (user_avg > 200 and user_avg < 800  ):
+        if not (user_avg > 80 and user_avg < 200  ): # rule
+            logger.info(f"rechazado: user_avg {user_avg}")
             continue
+        logger.info(f"aceptado: user_avg {user_avg}")
+
+        # ------------- rule -------------
+
 
     # si cumple las condiciones y NO EXISTE en la tabla transactions
     # debe entrar a la tabla y registrarse allí los valores iniciales
     # de los kpi para hacer las comparaciones posteriores.
 
     # Idea Evaluator(time_, cellname) # decide si escribe en la tab transactions,
-
-
