@@ -153,7 +153,7 @@ class Transaction(BASE):
                 )
 
 def get_engine():
-    logger.info(f'get_engine:')
+    logger.debug(f'get_engine:')
     return create_engine(DB_STR_CONNECTION, echo=ECHO)
 
 def get_session(engine=None):
@@ -163,7 +163,7 @@ def get_session(engine=None):
     return Session()
 
 def create_tables():
-    logger.info(f'create_tables:')
+    logger.debug(f'create_tables:')
     engine = get_engine()
     BASE.metadata.create_all(engine)
     return True

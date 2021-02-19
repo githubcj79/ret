@@ -14,6 +14,16 @@ import datetime
 import time
 
 def average_kpis(time_=None):
+    '''
+    Esta función recibe time_ de modo de poder inferir el periodo.
+    Para el periodo anterior, esta función devuelve para todas las
+    celdas (cellname) : user_avg, user_thrp_dl, traffic_dl.
+
+    Los datos anteriores corresponden al promedio de los valores
+    de esas muestras para la data del periodo por celda.
+
+    Esta función devuelve un dataframe con la data anterior.
+    '''
     logger.debug(f"ENV {ENV} time_ {time_}")
 
     if not time_:
