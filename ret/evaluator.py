@@ -62,24 +62,28 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
 
         antennas = session.query(Ret).filter(Ret.node==node,)
         for antenna in antennas:
-            logger.debug(f"node {antenna.node} deviceno {antenna.deviceno}")
+            logger.info(f"node {antenna.node} deviceno {antenna.deviceno}")
             trx = session.query(Transaction).filter(
                 and_(Transaction.node==antenna.node,
                     Transaction.deviceno==antenna.deviceno)).first()
             if trx:
+                # si trx anterior no fue exitosa
+                if not trx.success:
+                    logger.info(f"continue: success {trx.success}")
+                    continue
                 cond_ = delta_percentaje(
                     trx.user_thrp_dl_initial, user_thrp_dl) > 5.0
                 cond_ = cond_ or delta_percentaje(
                         trx.traffic_dl_initial, traffic_dl) > 10.0
                 if cond_:
                     # rollback
-                    logger.debug(f"rollback")
+                    logger.info(f"rollback")
                     newtilt_  = trx.oldtilt
                 else:
                     newtilt_ = newtilt(trx.newtilt)
 
                 if trx.newtilt == newtilt_:
-                    logger.debug(f"continue: newtilt_ {newtilt_}")
+                    logger.info(f"continue: newtilt_ {newtilt_}")
                     continue
 
                 # si nuevo tilt es distinto al último
@@ -87,7 +91,7 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
                 trx.generated = datetime.now()
             else:
                 if not (user_avg >= 80.0 and user_avg <= 200.0):
-                    logger.debug(f"continue: user_avg {user_avg}")
+                    logger.info(f"continue: user_avg {user_avg}")
                     continue
                 # se crea entrada en tabla transactions
                 trx = Transaction(
@@ -102,7 +106,7 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
                         datetimeid = time_,
                         generated = datetime.now(),
                         )
-                logger.debug(f"trx \n{trx}")
+                logger.info(f"trx \n{trx}")
                 session.add(trx)
             session.commit()
 
