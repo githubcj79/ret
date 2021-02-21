@@ -88,7 +88,9 @@ class Ret(BASE):
     subunitno = Column(Integer)
     localcellid = Column(Integer)
     __table_args__ = (
-                        Index('my_index1', "datetimeid", "node", "cellname"),
+                        Index('index1', "node", "deviceno"),
+                        Index('index2', "node", "cellname", "deviceno"),
+                        Index('index3', "cellname", "deviceno"),
                      )
 
     def __repr__(self):
@@ -108,9 +110,9 @@ class Ret(BASE):
 class Transaction(BASE):
     '''
     This is the class that supports the close looped anntenas transactions.
-    An anntena is identified by: node, cellname, deviceno.
-    created: when the anntena was created in this table.
-    generation: when the transaction was created in this table.
+    An anntena is identified by: node, deviceno. (J. definition)
+    datetimeid: when the anntena was created in this table.
+    generated: when the tilt was updated.
     sent: when the command was sent.
     success: if the command ended succesfully.
     failure: if the command ended with a failure.
@@ -121,19 +123,20 @@ class Transaction(BASE):
     cellname = Column(String(250), nullable=False)
     deviceno = Column(Integer)
     subunitno = Column(Integer)
-    tilt = Column(Integer)
+    tilt_initial = Column(Integer)
+    user_thrp_dl_initial = Column(Float, nullable=False) # initial value
+    traffic_dl_initial = Column(Float, nullable=False) # initial value
     oldtilt = Column(Integer)
     newtilt = Column(Integer)
-    user_thrp_dl = Column(Float, nullable=False) # initial value
-    traffic_dl = Column(Float, nullable=False) # initial value
-    created = Column(DateTime)
-    generation = Column(DateTime)
+    datetimeid = Column(DateTime)
+    generated = Column(DateTime)
     sent = Column(DateTime)
     success = Column(DateTime)
     failure = Column(DateTime)
     __table_args__ = (
-                        Index('index1', "cellname", "deviceno"),
+                        Index('index1', "node", "deviceno"),
                         Index('index2', "node", "cellname", "deviceno"),
+                        Index('index3', "cellname", "deviceno"),
                      )
 
     def __repr__(self):
@@ -142,11 +145,13 @@ class Transaction(BASE):
                 f"cellname[{self.cellname}],"
                 f"deviceno[{self.deviceno}],"
                 f"subunitno[{self.subunitno}],"
-                f"tilt[{self.tilt}],",
+                f"tilt_initial[{self.tilt_initial}],"
+                f"user_thrp_dl_initial[{self.user_thrp_dl_initial}],"
+                f"traffic_dl_initial[{self.traffic_dl_initial}],"
                 f"oldtilt[{self.oldtilt}],"
                 f"newtilt[{self.newtilt}],"
-                f"created[{self.generation}],"
-                f"generation[{self.generation}],"
+                f"datetimeid[{self.datetimeid}],"
+                f"generated[{self.generated}],"
                 f"sent[{self.sent}],"
                 f"success[{self.success}],"
                 f"failure[{self.failure}])"

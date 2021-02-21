@@ -20,7 +20,7 @@ def mid_term_evaluator(time_=None, candidates_df=pd.DataFrame()):
     if kpis_df.empty:
         return
 
-    l = ['cellname', 'user_avg', 'user_thrp_dl', 'traffic_dl',]
+    l = ['eNodeB_Name', 'cellname', 'user_avg', 'user_thrp_dl', 'traffic_dl',]
     candidates_kpis_df = pd.merge(candidates_df, kpis_df, how="inner", left_on='cellname', right_on='cellname')[l].drop_duplicates()
 
     evaluator(time_=time_, candidates_kpis_df=candidates_kpis_df)
