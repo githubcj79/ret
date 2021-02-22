@@ -12,10 +12,10 @@ from tables import (
     )
 
 def scheduler(time_=None):
+    logger.debug(f"time_ {time_}")
+
     if not time_:
         return
-
-    logger.debug(f"time_ {time_}")
 
     engine = get_engine()
     db_connection = engine.connect()

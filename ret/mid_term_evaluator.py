@@ -6,6 +6,7 @@ import pandas as pd
 
 from average_kpis import average_kpis
 from evaluator import evaluator
+from transactions import transactions
 
 def mid_term_evaluator(time_=None, candidates_df=pd.DataFrame()):
     logger.debug(f"time_ {time_}")
@@ -28,3 +29,5 @@ def mid_term_evaluator(time_=None, candidates_df=pd.DataFrame()):
     # Idea Executor < -- > NBI : podría ser un proceso independiente
     # - tengo q revisar q retorna el NBI
     # actualiza tablas transactions y rets
+
+    transactions(time_=time_)
