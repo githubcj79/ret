@@ -7,6 +7,15 @@ from sqlalchemy import and_
 
 import pandas as pd
 
+from settings import (
+        MAX_TILT,
+        DELTA_TILT,
+        MAX_DELTA_USER_THRP_DL_PERCENTAJE,
+        MAX_DELTA_TRAFFIC_DL_PERCENTAJE,
+        MIN_USER_AVG,
+        MAX_USER_AVG,
+    )
+
 from tables import (
         Ret,
         Transaction,
@@ -20,9 +29,7 @@ def newtilt(tilt=None):
     if not tilt:
         return
 
-    max_tilt = 50
-    delta_tilt = 1
-    return tilt + delta_tilt if tilt + delta_tilt < max_tilt else tilt
+    return tilt + DELTA_TILT if tilt + DELTA_TILT < MAX_TILT else tilt
 
 def delta_percentaje(reference=None, value=None):
     logger.debug(f"reference {reference} value {value}")
@@ -72,9 +79,9 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
                     logger.info(f"continue: success {trx.success}")
                     continue
                 cond_ = delta_percentaje(
-                    trx.user_thrp_dl_initial, user_thrp_dl) > 5.0
+                    trx.user_thrp_dl_initial, user_thrp_dl) > MAX_DELTA_USER_THRP_DL_PERCENTAJE
                 cond_ = cond_ or delta_percentaje(
-                        trx.traffic_dl_initial, traffic_dl) > 10.0
+                        trx.traffic_dl_initial, traffic_dl) > MAX_DELTA_TRAFFIC_DL_PERCENTAJE
                 if cond_:
                     # rollback
                     logger.info(f"rollback")
@@ -90,7 +97,7 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
                 trx.newtilt = newtilt_
                 trx.generated = datetime.now()
             else:
-                if not (user_avg >= 80.0 and user_avg <= 200.0):
+                if not (user_avg >= MIN_USER_AVG and user_avg <= MAX_USER_AVG):
                     logger.info(f"continue: user_avg {user_avg}")
                     continue
                 # se crea entrada en tabla transactions
