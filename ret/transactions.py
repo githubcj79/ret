@@ -6,7 +6,7 @@ from loguru import logger
 import pandas as pd
 
 from giver_of_times import giver_of_times
-
+from processor import processor
 from tables import (
         Ret,
         Transaction,
@@ -22,19 +22,21 @@ def transactions(time_=None):
     '''
     logger.debug(f"time_ {time_}")
 
+    if not time_:
+        return
+
     engine = get_engine()
     session = get_session(engine=engine)
-    # ----------------------------------------
+
     # detectar las transacciones a procesar
     trxs = session.query(Transaction).filter(Transaction.sent.is_(null()))
     for trx in trxs:
-        logger.info(f"trx \n{trx}")
-    # ----------------------------------------
+        # logger.info(f"trx \n{trx}")
+        processor(time_=time_,session_=session,trx_=trx)
+
     session.commit()
     session.close()
 
-    if not time_:
-        return
 
 def main():
     for time_ in giver_of_times():
