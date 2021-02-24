@@ -1,14 +1,24 @@
 APP:
   ENVIRONMENT: sim
+
   DEBUG: True
   # Only accept True or False
 
-DATABASE:
-    USERNAME: testuser
+DB_LOCAL:
+    # HOST: 172.17.0.1 # linux
+    HOST: 127.0.0.1 # windows
+    DATABASE: mytestdb
+    USER: testuser
     PASSWORD: testpassword
-    HOST: 172.17.0.1
     PORT: 33060
-    DB: mytestdb
+    ECHO: False
+
+DB_PROD:
+    HOST: 10.120.145.103
+    DATABASE: db
+    USER: vmran
+    PASSWORD: Vixsdeod3
+    PORT: 3306
     ECHO: False
 
 EVALUATOR:

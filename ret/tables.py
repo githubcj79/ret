@@ -23,7 +23,8 @@ from sqlalchemy.orm import (
 from settings import (
         ENV,
         ECHO,
-        DB_STR_CONNECTION
+        LOCAL_DB_STR_CONNECTION,
+        PROD_DB_STR_CONNECTION,
     )
 
 BASE = declarative_base()
@@ -159,7 +160,11 @@ class Transaction(BASE):
 
 def get_engine():
     logger.debug(f'get_engine:')
-    return create_engine(DB_STR_CONNECTION, echo=ECHO)
+    return create_engine(LOCAL_DB_STR_CONNECTION, echo=ECHO)
+
+def get_prod_engine():
+    logger.debug(f'get_engine:')
+    return create_engine(PROD_DB_STR_CONNECTION, echo=ECHO)
 
 def get_session(engine=None):
     if not engine:

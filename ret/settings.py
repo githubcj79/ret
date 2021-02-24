@@ -8,13 +8,22 @@ dict_ = read_yaml(file_path)
 
 ENV = dict_['APP']['ENVIRONMENT']
 
-host = dict_['DATABASE']['HOST']
-user = dict_['DATABASE']['USERNAME']
-password = dict_['DATABASE']['PASSWORD']
-database = dict_['DATABASE']['DB']
-port = dict_['DATABASE']['PORT']
-ECHO = dict_['DATABASE']['ECHO']
-DB_STR_CONNECTION = ("mysql+mysqlconnector:"
+host = dict_['DB_LOCAL']['HOST']
+database = dict_['DB_LOCAL']['DATABASE']
+user = dict_['DB_LOCAL']['USER']
+password = dict_['DB_LOCAL']['PASSWORD']
+port = dict_['DB_LOCAL']['PORT']
+ECHO = dict_['DB_LOCAL']['ECHO']
+LOCAL_DB_STR_CONNECTION = ("mysql+mysqlconnector:"
+            f"//{user}:{password}@{host}:{port}/{database}")
+
+host = dict_['DB_PROD']['HOST']
+database = dict_['DB_PROD']['DATABASE']
+user = dict_['DB_PROD']['USER']
+password = dict_['DB_PROD']['PASSWORD']
+port = dict_['DB_PROD']['PORT']
+# ECHO = dict_['DB_PROD']['ECHO']
+PROD_DB_STR_CONNECTION = ("mysql+mysqlconnector:"
             f"//{user}:{password}@{host}:{port}/{database}")
 
 MAX_TILT = dict_['EVALUATOR']['MAX_TILT']
