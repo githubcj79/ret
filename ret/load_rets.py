@@ -7,13 +7,19 @@ import pandas as pd
 
 from loguru import logger
 
+from ret_data import ret_data
+
+from settings import (
+        ENV,
+    )
+
 from tables import (
         get_engine,
         get_session,
     )
 
-def load_rets(period=None):
-    logger.info(f'load_rets:')
+def load_rets(time_=None):
+    logger.info(f'ENV {ENV}')
 
     if not period:
         return
@@ -60,13 +66,21 @@ def load_rets(period=None):
     engine = get_engine()
     session = get_session(engine=engine)
 
-    df = pd.DataFrame.from_dict(list_)
+    if ENV == 'sim':
+        df = pd.DataFrame.from_dict(list_)
+        # df.to_sql('rets', con=engine, if_exists='append', index=False)
+
+    # ----------------------------------------------------
+    if ENV == 'prod':
+        df = ret_data(time_=time_)
+
     df.to_sql('rets', con=engine, if_exists='append', index=False)
+    # ----------------------------------------------------
 
     session.commit()
     session.close()
 
 
 if __name__ == '__main__':
-    load_rets(period=datetime.datetime(2021, 1, 10, 10, 30, 0, 0))
+    load_rets(time_=datetime.datetime(2021, 1, 10, 10, 30, 0, 0))
 

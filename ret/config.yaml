@@ -1,6 +1,6 @@
 APP:
-  ENVIRONMENT: sim
-
+  # ENVIRONMENT: sim
+  ENVIRONMENT: prod
   DEBUG: True
   # Only accept True or False
 
