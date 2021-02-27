@@ -30,10 +30,10 @@ def ret_data(time_=None):
     period = now_.strftime("%Y-%m-%d")
 
     query_ = f'''
-    select x.dateid, x.node, x.devicename, x.deviceno, x.tilt,
+    select x.datetimeid, x.node, x.devicename, x.deviceno, x.tilt,
     x.subname, x.subunitno, y.localcellid, y.eci, y.cellname
     from (select
-    ret.dateid as dateid,
+    ret.dateid as datetimeid,
     ret.node as node,
     ret.devicename as devicename,
     ret.deviceno as deviceno,
@@ -64,6 +64,7 @@ def ret_data(time_=None):
 
         query = query_
         df = pd.read_sql(query,cnx)
+        logger.info(f'df.shape {df.shape}')
         cnx.close()
         return df
 

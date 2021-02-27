@@ -21,12 +21,12 @@ from tables import (
 def load_rets(time_=None):
     logger.info(f'ENV {ENV}')
 
-    if not period:
+    if not time_:
         return
 
     list_ = [
                 {
-                    'datetimeid' : period,
+                    'datetimeid' : time_,
                     'node' : 'MBTS-AIS_3G_003',
                     'cellname' : 'AIS_4G_003_3',
                     'eci' : 2816002,
@@ -38,7 +38,7 @@ def load_rets(time_=None):
                     'localcellid' : 2,
                 },
                 {
-                    'datetimeid' : period,
+                    'datetimeid' : time_,
                     'node' : 'MBTS-ARA_3G_013',
                     'cellname' : 'ARA_4G_013_3',
                     'eci' : 2304258,
@@ -50,7 +50,7 @@ def load_rets(time_=None):
                     'localcellid' : 2,
                 },
                 {
-                    'datetimeid' : period,
+                    'datetimeid' : time_,
                     'node' : 'MBTS-ARA_3G_013',
                     'cellname' : 'ARA_4G_013_3',
                     'eci' : 2304258,
@@ -63,24 +63,24 @@ def load_rets(time_=None):
                 },
             ]
 
-    engine = get_engine()
-    session = get_session(engine=engine)
+    # engine = get_engine()
+    # session = get_session(engine=engine)
 
     if ENV == 'sim':
         df = pd.DataFrame.from_dict(list_)
-        # df.to_sql('rets', con=engine, if_exists='append', index=False)
 
-    # ----------------------------------------------------
     if ENV == 'prod':
         df = ret_data(time_=time_)
 
-    df.to_sql('rets', con=engine, if_exists='append', index=False)
-    # ----------------------------------------------------
+    logger.info(f'df.shape {df.shape}')
 
+    engine = get_engine()
+    session = get_session(engine=engine)
+    df.to_sql('rets', con=engine, if_exists='append', index=False)
     session.commit()
     session.close()
 
 
 if __name__ == '__main__':
-    load_rets(time_=datetime.datetime(2021, 1, 10, 10, 30, 0, 0))
-
+    # load_rets(time_=datetime.datetime(2021, 2, 25, 10, 30, 0, 0))
+    load_rets(time_=datetime.datetime(2021, 2, 26, 10, 30, 0, 0))
