@@ -17,11 +17,11 @@ ECHO = dict_['DB_LOCAL']['ECHO']
 LOCAL_DB_STR_CONNECTION = ("mysql+mysqlconnector:"
             f"//{user}:{password}@{host}:{port}/{database}")
 
-host = dict_['DB_PROD']['HOST']
-database = dict_['DB_PROD']['DATABASE']
-user = dict_['DB_PROD']['USER']
-password = dict_['DB_PROD']['PASSWORD']
-port = dict_['DB_PROD']['PORT']
+host_ = dict_['DB_PROD']['HOST']
+database_ = dict_['DB_PROD']['DATABASE']
+user_ = dict_['DB_PROD']['USER']
+password_ = dict_['DB_PROD']['PASSWORD']
+port_ = dict_['DB_PROD']['PORT']
 # ECHO = dict_['DB_PROD']['ECHO']
 PROD_DB_STR_CONNECTION = ("mysql+mysqlconnector:"
             f"//{user}:{password}@{host}:{port}/{database}")
