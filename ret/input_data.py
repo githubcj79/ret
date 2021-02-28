@@ -6,9 +6,26 @@ import pandas as pd
 
 from loguru import logger
 
-def get_cells_df():
-    logger.info(f'get_cells_df:')
-    return pd.read_csv("./data/lcellreference_2020_12_30.csv")
+from cells_data import cells_data
+
+from settings import (
+        ENV,
+    )
+
+def get_cells_df(time_=None):
+    logger.info(f'ENV {ENV}')
+
+    if ENV == 'sim':
+        df = pd.read_csv("./data/lcellreference_2020_12_30.csv")
+
+    if ENV == 'prod':
+        if not time_:
+            logger.info(f'time_ {time_}')
+            return
+
+        df = cells_data(time_=time_)
+
+    return df
 
 # esta función debe eliminarse y usarse la de abajo
 def get_ta_df():

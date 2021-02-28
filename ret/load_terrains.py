@@ -7,7 +7,7 @@ import pandas as pd
 
 from loguru import logger
 
-from terrain_data import terrain_data
+from terrains_data import terrains_data
 
 from settings import (
         ENV,
@@ -43,7 +43,7 @@ def load_terrains(time_=None):
         df = pd.DataFrame.from_dict(list_)
 
     if ENV == 'prod':
-        df = terrain_data(time_=time_)
+        df = terrains_data(time_=time_)
 
     logger.info(f'df.shape {df.shape}')
 

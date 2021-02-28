@@ -1,29 +1,36 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import datetime
 import pandas as pd
-import numpy as np
+# import numpy as np
+from loguru import logger
 
-from etilt.config.conf import (
-        logger,
+from settings import (
+        ENV,
         KM,
         D,
         N_DISTANCE,
         TERRAIN_DELTA,
     )
 
-from utilities.input_data import (
+from input_data import (
         get_cells_df,
     )
 
-from utilities.numpy_functions import (
+from numpy_functions import (
         haversine_distance,
         bearing,
     )
 
-def neighborhood():
-    logger.info(f'neighborhood:')
-    cells_df = get_cells_df()
+def neighborhood(time_=None):
+    logger.debug(f'ENV {ENV}')
+
+    if not time_:
+        logger.info(f'time_ {time_}')
+        return
+
+    cells_df = get_cells_df(time_=time_)
 
     l = ['SITE', 'LAT', 'LON']
     sites_df = cells_df[l].drop_duplicates()
@@ -66,8 +73,15 @@ def neighborhood():
 
     l = ['CELLNAME', 'AZIMUTH', 'SITE_x', 'SITE_y', 'distance_',
        'bearing_']
+
+    logger.debug(f'neighborhood_df[l].shape {neighborhood_df[l].shape}')
     return neighborhood_df[l]
+
+def main():
+        # time_ = datetime.datetime(2021, 2, 25, 10, 30, 0, 0)
+        time_ = datetime.datetime.now()
+        neighborhood_df = neighborhood(time_=time_)
 
 
 if __name__ == '__main__':
-    neighborhood_df = neighborhood()
+    main()
