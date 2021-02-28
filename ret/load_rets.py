@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import numpy as np
+# import numpy as np
 import pandas as pd
 
 from loguru import logger
@@ -62,9 +62,6 @@ def load_rets(time_=None):
                     'localcellid' : 2,
                 },
             ]
-
-    # engine = get_engine()
-    # session = get_session(engine=engine)
 
     if ENV == 'sim':
         df = pd.DataFrame.from_dict(list_)
