@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-# import numpy as np
 import pandas as pd
 
 from loguru import logger
 
-from ret_data import ret_data
+from rets_data import rets_data
 
 from settings import (
         ENV,
@@ -67,9 +66,7 @@ def load_rets(time_=None):
         df = pd.DataFrame.from_dict(list_)
 
     if ENV == 'prod':
-        df = ret_data(time_=time_)
-
-    logger.info(f'df.shape {df.shape}')
+        df = rets_data(time_=time_)
 
     engine = get_engine()
     session = get_session(engine=engine)
@@ -80,4 +77,10 @@ def load_rets(time_=None):
 
 if __name__ == '__main__':
     # load_rets(time_=datetime.datetime(2021, 2, 25, 10, 30, 0, 0))
-    load_rets(time_=datetime.datetime(2021, 2, 26, 10, 30, 0, 0))
+    # load_rets(time_=datetime.datetime(2021, 2, 26, 10, 30, 0, 0))
+    now_ = datetime.datetime.now()
+    day_before = now_  - datetime.timedelta(days=1)
+    when_ = day_before
+    # period = when_.strftime("%Y-%m-%d")
+
+    df = load_rets(time_=when_)
