@@ -8,11 +8,6 @@ from pd_sql import pd_sql
 
 from settings import (
         ENV,
-        host_,
-        database_,
-        user_,
-        password_,
-        port_,
     )
 
 def cells_data(time_=None):
