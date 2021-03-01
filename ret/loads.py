@@ -26,11 +26,11 @@ def loads():
     # load_rets(time_=now_) # ok
 
     now_ = datetime.datetime.now()
-    neighborhood_df, cells_df = load_terrains(
-                        time_=now_,
-                        neighborhood_df=neighborhood_df,
-                        cells_df=cells_df,
-                        )
+    # neighborhood_df, cells_df = load_terrains(
+    #                     time_=now_,
+    #                     neighborhood_df=neighborhood_df,
+    #                     cells_df=cells_df,
+    #                     )
 
 def main():
     loads()
