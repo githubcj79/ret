@@ -74,13 +74,13 @@ def neighborhood(time_=None):
     l = ['CELLNAME', 'AZIMUTH', 'SITE_x', 'SITE_y', 'distance_',
        'bearing_']
 
-    logger.debug(f'neighborhood_df[l].shape {neighborhood_df[l].shape}')
-    return neighborhood_df[l]
+    logger.info(f'neighborhood_df[l].shape {neighborhood_df[l].shape}')
+    return neighborhood_df[l], cells_df
 
 def main():
         # time_ = datetime.datetime(2021, 2, 25, 10, 30, 0, 0)
         time_ = datetime.datetime.now()
-        neighborhood_df = neighborhood(time_=time_)
+        neighborhood_df, cells_df = neighborhood(time_=time_)
 
 
 if __name__ == '__main__':

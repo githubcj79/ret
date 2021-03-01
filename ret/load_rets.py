@@ -83,4 +83,4 @@ if __name__ == '__main__':
     when_ = day_before
     # period = when_.strftime("%Y-%m-%d")
 
-    df = load_rets(time_=when_)
+    load_rets(time_=when_)

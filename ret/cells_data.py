@@ -17,8 +17,8 @@ def cells_data(time_=None):
         logger.info(f'time_ {time_}')
         return
 
-    now_ = time_
-    period = now_.strftime("%Y-%m-%d")
+    when_ = time_
+    period = when_.strftime("%Y-%m-%d")
 
     query_ = f'''
     select distinct * from lcellreference as l
@@ -28,7 +28,7 @@ def cells_data(time_=None):
     return pd_sql(time_=time_, query_=query_)
 
 def main():
-    # now_ = datetime.datetime.now()
+    # when_ = datetime.datetime.now()
     # day_before = time_  - datetime.timedelta(days=1)
     time_ = datetime.datetime.now()
     df = cells_data(time_=time_)
