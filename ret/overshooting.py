@@ -191,35 +191,33 @@ def main():
     neighborhood_df, cells_df = neighborhood(time_=day_before)
     ta_df = get_ta_df(time_=day_before)
 
-    neighborhood_df.reset_index(inplace=True)
-    cells_df.reset_index(inplace=True)
-    ta_df.reset_index(inplace=True)
+    # neighborhood_df.reset_index(inplace=True)
+    # cells_df.reset_index(inplace=True)
+    # ta_df.reset_index(inplace=True)
     # ------------------------------------------
 
     neighborhood_df, overshooters_df = overshooting(neighborhood_df=neighborhood_df, ta_df=ta_df)
     # neighborhood_df.to_excel(r'data/neighborhood_df.xlsx', index = False)
     # overshooters_df.to_excel(r'data/overshooters_df.xlsx', index = False)
 
-    neighborhood_df.reset_index(inplace=True)
-    overshooters_df.reset_index(inplace=True)
+    # neighborhood_df.reset_index(inplace=True)
+    # overshooters_df.reset_index(inplace=True)
 
     neighborhood_df, overshooters_intensity_df = overshooting_intensity(neighborhood_df=neighborhood_df, ta_df=ta_df)
     # neighborhood_df.to_excel(r'data/neighborhood_df.xlsx', index = False)
-    # overshooters_intensity_df.to_excel(r'data/overshooters_intensity_df.xlsx', index = False)
+    overshooters_intensity_df.to_excel(r'data/overshooters_intensity_df.xlsx', index = False)
 
     # neighborhood_df.reset_index(inplace=True)
     # overshooters_intensity_df.reset_index(inplace=True)
 
     intensity_df = overshooters_intensity_df.drop(['distance_'], axis = 1)
-    intensity_df.reset_index(inplace=True)
+    # intensity_df.reset_index(inplace=True)
 
     merged_df = pd.merge(overshooters_df, intensity_df, how="inner", left_on='CELLNAME', right_on='CELLNAME').drop_duplicates()
     # merged_df.to_excel(r'data/merged_df.xlsx', index = False)
-    merged_df.reset_index(inplace=True)
+    # merged_df.reset_index(inplace=True)
 
-    return merged_df
+    return overshooters_df, intensity_df, merged_df
 
 if __name__ == '__main__':
     main()
-
-

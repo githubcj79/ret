@@ -26,6 +26,13 @@ def ta_data(time_=None):
      between '{period}' and '{period}';
     '''
 
+    query_ = f'''
+    select distinct * from prs_lte_hour p
+    where STR_TO_DATE(p.dateid_date, '%Y-%m-%d')
+     between '{period}' and '{period}'
+      and p.dateid_hour = '20';
+    '''
+
     return pd_sql(time_=time_, query_=query_)
 
 def main():
