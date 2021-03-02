@@ -28,9 +28,22 @@ def get_cells_df(time_=None):
     return df
 
 # esta función debe eliminarse y usarse la de abajo
-def get_ta_df():
-    logger.info(f'get_ta_df:')
-    return pd.read_csv("./data/prs_lte_hour_2020_12_30.csv")
+def get_ta_df(time_=None):
+    # logger.info(f'get_ta_df:')
+    # return pd.read_csv("./data/prs_lte_hour_2020_12_30.csv")
+    logger.info(f'ENV {ENV}')
+
+    if ENV == 'sim':
+        df = pd.read_csv("./data/prs_lte_hour_2020_12_30.csv")
+
+    if ENV == 'prod':
+        if not time_:
+            logger.info(f'time_ {time_}')
+            return
+
+        df = ta_data(time_=time_)
+
+    return df
 
 def get_prs_lte_hour_df():
     logger.info(f'get_prs_lte_hour_df:')

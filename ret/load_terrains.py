@@ -53,7 +53,6 @@ def load_terrains(time_=None,
     logger.info(f'terrain_df.shape {terrain_df.shape}')
     logger.info(f'terrain_df.columns {terrain_df.columns}')
 
-    # --------------------------------------------
     terrains_dict = terrain_df.to_dict('index')
     engine = get_engine()
     session = get_session(engine=engine)
@@ -74,13 +73,6 @@ def load_terrains(time_=None,
         session.add(obj_)
     session.commit()
     session.close()
-    # --------------------------------------------
-
-    # engine = get_engine()
-    # session = get_session(engine=engine)
-    # terrain_df.to_sql('terrains', con=engine, if_exists='append', index=False)
-    # session.commit()
-    # session.close()
 
     return neighborhood_df, cells_df
 
