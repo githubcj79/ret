@@ -79,8 +79,9 @@ def neighborhood(time_=None):
 
 def main():
         # time_ = datetime.datetime(2021, 2, 25, 10, 30, 0, 0)
-        time_ = datetime.datetime.now()
-        neighborhood_df, cells_df = neighborhood(time_=time_)
+        now_ = datetime.datetime.now()
+        day_before = now_  - datetime.timedelta(days=1)
+        neighborhood_df, cells_df = neighborhood(time_=day_before)
 
 
 if __name__ == '__main__':

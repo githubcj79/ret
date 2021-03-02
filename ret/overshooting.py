@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import datetime
 import pandas as pd
 import numpy as np
 
-from etilt.config.conf import (
-        logger,
+from loguru import logger
+
+from settings import (
+        ENV,
         KM,
         D,
         N_DISTANCE,
@@ -13,12 +16,12 @@ from etilt.config.conf import (
         SAMPLES_PERCENTAGE,
     )
 
-from utilities.input_data import (
+from input_data import (
         get_cells_df,
         get_ta_df,
     )
 
-from utilities.neighborhood import (
+from neighborhood import (
         neighborhood,
     )
 
@@ -98,11 +101,14 @@ def cum_sum_out(row):
     parcial_sum = row['L_RA_TA_UE_Index11'] - row[f"L_RA_TA_UE_Index{row['distance_index']}"]
     return parcial_sum * 100 / (row['L_RA_TA_UE_Index11']+1)
 
-def overshooting_intensity():
+def overshooting_intensity(neighborhood_df=pd.DataFrame(),
+                    ta_df=pd.DataFrame()):
     global TA_COLUMNS, TA_INDEX
     logger.info(f'overshooting_intensity:')
-    neighborhood_df = neighborhood()
-    neighborhood_df.reset_index(inplace=True)
+
+    if neighborhood_df.empty:
+        neighborhood_df = neighborhood()
+        neighborhood_df.reset_index(inplace=True)
 
     l = ['CELLNAME', 'distance_']
     t = ['CELLNAME']
@@ -110,7 +116,8 @@ def overshooting_intensity():
     overshooters_intensity_df.reset_index(inplace=True)
     overshooters_intensity_df['distance_index'] = overshooters_intensity_df.apply(distance_percentaje_index, axis=1)
 
-    ta_df = get_ta_df()
+    if ta_df.empty:
+        ta_df = get_ta_df()
 
     l = ['L_RA_TA_UE_Index0','L_RA_TA_UE_Index1', 'L_RA_TA_UE_Index2',
         'L_RA_TA_UE_Index3', 'L_RA_TA_UE_Index4','L_RA_TA_UE_Index5',
@@ -136,7 +143,8 @@ def overshooting_intensity():
 
     return neighborhood_df, new_merged_df
 
-def overshooting(neighborhood_df=pd.DataFrame()):
+def overshooting(neighborhood_df=pd.DataFrame(),
+                    ta_df=pd.DataFrame()):
     global TA_COLUMNS, TA_INDEX
     logger.info(f'overshooting:')
 
@@ -151,7 +159,8 @@ def overshooting(neighborhood_df=pd.DataFrame()):
     overshooters_df = neighborhood_df[l].groupby(t).mean()
     overshooters_df.reset_index(inplace=True)
 
-    ta_df = get_ta_df()
+    if ta_df.empty:
+        ta_df = get_ta_df()
 
     l = ['Cell_Name', 'L_RA_TA_UE_Index0',
                             'L_RA_TA_UE_Index1', 'L_RA_TA_UE_Index2',
@@ -176,18 +185,37 @@ def overshooting(neighborhood_df=pd.DataFrame()):
     return neighborhood_df, overshooters_df
 
 def main():
-    neighborhood_df, overshooters_df = overshooting()
-    # neighborhood_df.to_excel(r'data/neighborhood_df.xlsx', index = False)
-    overshooters_df.to_excel(r'data/overshooters_df.xlsx', index = False)
+    # ------------------------------------------
+    now_ = datetime.datetime.now()
+    day_before = now_  - datetime.timedelta(days=1)
+    neighborhood_df, cells_df = neighborhood(time_=day_before)
+    ta_df = get_ta_df(time_=day_before)
 
-    neighborhood_df, overshooters_intensity_df = overshooting_intensity()
+    neighborhood_df.reset_index(inplace=True)
+    cells_df.reset_index(inplace=True)
+    ta_df.reset_index(inplace=True)
+    # ------------------------------------------
+
+    neighborhood_df, overshooters_df = overshooting(neighborhood_df=neighborhood_df, ta_df=ta_df)
     # neighborhood_df.to_excel(r'data/neighborhood_df.xlsx', index = False)
-    overshooters_intensity_df.to_excel(r'data/overshooters_intensity_df.xlsx', index = False)
+    # overshooters_df.to_excel(r'data/overshooters_df.xlsx', index = False)
+
+    neighborhood_df.reset_index(inplace=True)
+    overshooters_df.reset_index(inplace=True)
+
+    neighborhood_df, overshooters_intensity_df = overshooting_intensity(neighborhood_df=neighborhood_df, ta_df=ta_df)
+    # neighborhood_df.to_excel(r'data/neighborhood_df.xlsx', index = False)
+    # overshooters_intensity_df.to_excel(r'data/overshooters_intensity_df.xlsx', index = False)
+
+    # neighborhood_df.reset_index(inplace=True)
+    # overshooters_intensity_df.reset_index(inplace=True)
 
     intensity_df = overshooters_intensity_df.drop(['distance_'], axis = 1)
+    intensity_df.reset_index(inplace=True)
 
     merged_df = pd.merge(overshooters_df, intensity_df, how="inner", left_on='CELLNAME', right_on='CELLNAME').drop_duplicates()
-    merged_df.to_excel(r'data/merged_df.xlsx', index = False)
+    # merged_df.to_excel(r'data/merged_df.xlsx', index = False)
+    merged_df.reset_index(inplace=True)
 
     return merged_df
 

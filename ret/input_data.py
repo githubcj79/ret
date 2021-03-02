@@ -7,6 +7,7 @@ import pandas as pd
 from loguru import logger
 
 from cells_data import cells_data
+from ta_data import ta_data
 
 from settings import (
         ENV,
