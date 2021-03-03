@@ -79,8 +79,8 @@ if __name__ == '__main__':
     # load_rets(time_=datetime.datetime(2021, 2, 25, 10, 30, 0, 0))
     # load_rets(time_=datetime.datetime(2021, 2, 26, 10, 30, 0, 0))
     now_ = datetime.datetime.now()
-    day_before = now_  - datetime.timedelta(days=1)
-    when_ = day_before
+    # day_before = now_  - datetime.timedelta(days=1)
+    when_ = now_
     # period = when_.strftime("%Y-%m-%d")
 
     load_rets(time_=when_)

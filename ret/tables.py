@@ -88,6 +88,9 @@ class Ret(BASE):
     subname = Column(String(128))
     subunitno = Column(Integer)
     localcellid = Column(Integer)
+    # ----------------------------------
+    enabled = Column(Boolean, default=False)
+    # ----------------------------------
     __table_args__ = (
                         Index('index1', "node", "deviceno"),
                         Index('index2', "node", "cellname", "deviceno"),
