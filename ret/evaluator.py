@@ -69,6 +69,8 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
 
         antennas = session.query(Ret).filter(Ret.node==node,)
         for antenna in antennas:
+            if not antenna.enabled:
+                continue
             logger.info(f"node {antenna.node} deviceno {antenna.deviceno}")
             trx = session.query(Transaction).filter(
                 and_(Transaction.node==antenna.node,
