@@ -8,6 +8,7 @@ from loguru import logger
 from load_rets import load_rets
 from load_terrains import load_terrains
 from neighborhood import neighborhood
+from load_overshooters import load_overshooters
 
 from settings import (
         ENV,
@@ -23,14 +24,20 @@ def loads():
     neighborhood_df, cells_df = neighborhood(time_=now_)
 
     now_ = datetime.datetime.now()
-    # load_rets(time_=now_) # ok
+    load_rets(time_=now_) # ok
 
     now_ = datetime.datetime.now()
-    # neighborhood_df, cells_df = load_terrains(
-    #                     time_=now_,
-    #                     neighborhood_df=neighborhood_df,
-    #                     cells_df=cells_df,
-    #                     )
+    neighborhood_df, cells_df = load_terrains(
+                        time_=now_,
+                        neighborhood_df=neighborhood_df,
+                        cells_df=cells_df,
+                        )
+
+    now_ = datetime.datetime.now()
+    load_overshooters(time_=now_,
+                        neighborhood_df=neighborhood_df,
+                        cells_df=cells_df,
+                        )
 
 def main():
     loads()

@@ -184,11 +184,22 @@ def overshooting(neighborhood_df=pd.DataFrame(),
 
     return neighborhood_df, overshooters_df
 
-def main():
+def overshooters(time_=None, neighborhood_df=pd.DataFrame(),
+    cells_df=pd.DataFrame()):
+    logger.debug(f'ENV {ENV}')
+
+    if not time_:
+        logger.info(f'time_ {time_}')
+        return
     # ------------------------------------------
-    now_ = datetime.datetime.now()
-    day_before = now_  - datetime.timedelta(days=1)
-    neighborhood_df, cells_df = neighborhood(time_=day_before)
+    # fue necesario setear tiempos para avanzar con las pruebas ..
+    # now_ = datetime.datetime.now()
+
+
+    if neighborhood_df.empty:
+        neighborhood_df, cells_df = neighborhood(time_)
+
+    day_before = time_  - datetime.timedelta(days=1)
     ta_df = get_ta_df(time_=day_before)
 
     # neighborhood_df.reset_index(inplace=True)
@@ -217,7 +228,26 @@ def main():
     # merged_df.to_excel(r'data/merged_df.xlsx', index = False)
     # merged_df.reset_index(inplace=True)
 
-    return overshooters_df, intensity_df, merged_df
+    # ------------------------------------------------
+    l = ['CELLNAME', 'ta_', 'distance_', 'overshooter', 'overs_intensity']
+    overshooters_df = merged_df[l].drop_duplicates()
+
+    l = ['cellname', 'ta_calculated', 'average_distance', 'overshooter', 'intensity']
+    overshooters_df.columns = l
+
+    overshooters_df['datetimeid'] = cells_df.iloc[0]['Dateid']
+    # ------------------------------------------------
+
+    # return overshooters_df, intensity_df, merged_df
+    return overshooters_df
+
+def main():
+    now_ = datetime.datetime.now()
+    # when_ = now_  - datetime.timedelta(days=2)
+    when_ = now_
+    # overshooters_df, intensity_df, merged_df = overshooters(time_=when_)
+    overshooters_df = overshooters(time_=when_)
+
 
 if __name__ == '__main__':
     main()
