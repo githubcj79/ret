@@ -5,7 +5,7 @@ from loguru import logger
 import pandas as pd
 
 from giver_of_times import giver_of_times
-from input_data import get_period_data
+from input_data import get_ta_df
 from settings import (
         ENV,
     )
@@ -29,8 +29,8 @@ def average_kpis(time_=None):
     if not time_:
         return
 
-    period = time_.strftime("%Y%m%d")
-    logger.debug(f"period {period}")
+    # period = time_.strftime("%Y%m%d")
+    # logger.debug(f"period {period}")
 
     data_df = pd.DataFrame() # empty df
     if ENV == 'sim':
@@ -42,8 +42,9 @@ def average_kpis(time_=None):
                     'traffic_dl': [8285.170, 7660.760],
                 }
         data_df = pd.DataFrame.from_dict(dict_)
-    elif ENV == 'dev':
-        data_df = get_period_data(period = period)
+
+    if ENV == 'prod':
+        data_df = get_ta_df(time_=time_)
 
     return data_df
 

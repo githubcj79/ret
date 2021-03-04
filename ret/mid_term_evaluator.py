@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import datetime
 from loguru import logger
 import pandas as pd
 
@@ -17,12 +18,14 @@ def mid_term_evaluator(time_=None, candidates_df=pd.DataFrame()):
     if candidates_df.empty:
         return
 
-    kpis_df = average_kpis(time_)
+    day_before = time_  - datetime.timedelta(days=1)
+    when_ = day_before
+    kpis_df = average_kpis(when_)
     if kpis_df.empty:
         return
 
     l = ['eNodeB_Name', 'cellname', 'user_avg', 'user_thrp_dl', 'traffic_dl',]
-    candidates_kpis_df = pd.merge(candidates_df, kpis_df, how="inner", left_on='cellname', right_on='cellname')[l].drop_duplicates()
+    candidates_kpis_df = pd.merge(candidates_df, kpis_df, how="inner", left_on='cellname', right_on='Cell_Name')[l].drop_duplicates()
 
     evaluator(time_=time_, candidates_kpis_df=candidates_kpis_df)
 

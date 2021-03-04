@@ -50,9 +50,17 @@ def get_prs_lte_hour_df():
     logger.info(f'get_prs_lte_hour_df:')
     return pd.read_csv("./data/prs_lte_hour_2020_12_30.csv")
 
-def get_period_data(period = None):
-    logger.info(f'get_period_data:')
-    return pd.read_json (f'./data/_prs_lte_hour_{period}.json')
+def get_period_data(time_=None):
+    logger.info(f'ENV {ENV}')
+
+    if ENV == 'sim':
+        period = time_.strftime("%Y%m%d")
+        df = pd.read_json (f'./data/_prs_lte_hour_{period}.json')
+
+    if ENV == 'prod':
+        df = kpi_data(time_=time_)
+
+    return df
 
 def get_ret_data(period = None):
     logger.info(f'get_ret_data:')

@@ -109,8 +109,15 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
                         deviceno = antenna.deviceno,
                         subunitno = antenna.subunitno,
                         tilt_initial = antenna.tilt,
-                        user_thrp_dl_initial = user_thrp_dl,
-                        traffic_dl_initial = traffic_dl,
+
+                        # originalmente
+                        # user_thrp_dl_initial = user_thrp_dl,
+                        # traffic_dl_initial = traffic_dl,
+
+                        # para ver si pasa
+                        user_thrp_dl_initial = float(user_thrp_dl),
+                        traffic_dl_initial = float(traffic_dl),
+
                         newtilt = newtilt(antenna.tilt),
                         datetimeid = time_,
                         generated = datetime.now(),

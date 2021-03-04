@@ -6,12 +6,16 @@ from loguru import logger
 import datetime
 import time
 
+from settings import ENV
+
 def giver_of_times():
     '''
     Esta funcion es un generador de tiempos.
     Estos tiempos se asocian a los ciclos.
     Es el reloj del simulador.
     '''
+    logger.debug(f"")
+
     time_list = [
                     datetime.datetime(2021, 1, 10, 10, 30, 0, 0),
                     datetime.datetime(2021, 1, 11, 10, 30, 0, 0),
@@ -21,9 +25,13 @@ def giver_of_times():
 
     seconds = 1
 
-    for time_ in time_list:
-        time.sleep(seconds)
-        yield time_
+    if ENV == 'sim':
+        for time_ in time_list:
+            time.sleep(seconds)
+            yield time_
+
+    if ENV == 'prod':
+        yield datetime.datetime.now()
 
 def main():
     for time_ in giver_of_times():
