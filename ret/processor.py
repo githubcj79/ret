@@ -1,41 +1,54 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from sqlalchemy import null
 from loguru import logger
-from random import randint
+import pandas as pd
 
+from giver_of_times import giver_of_times
+from nbi_processor import nbi_processor
+from nbi_simulator import nbi_simulator
 from settings import ENV
+from tables import (
+        # Ret,
+        Transaction,
+        get_engine,
+        get_session,
+    )
 
-def failure_percentage():
-    FAILURE_PERCENTAGE=5
-
-    random_int = randint(1, 100)
-
-    if random_int <= FAILURE_PERCENTAGE:
-        return False
-    return True
-
-def processor(time_=None,session_=None,trx_=None):
+def processor(time_=None):
+    '''
+    Esta función detecta las transacciones en la tabla transactions.
+    y las ejecuta sobre el nbi.
+    Por ahora no se reintentan transacciones fallidas.
+    '''
     logger.debug(f"time_ {time_}")
 
-    if not time_ or not session_ or not trx_:
-        pass
+    if not time_:
+        return
 
-    logger.info(f"trx_ \n{trx_}")
-    # logger.info(f"ENV {ENV}")
+    engine = get_engine()
+    session = get_session(engine=engine)
+
+    # detectar las transacciones a procesar
+    trxs = session.query(Transaction).filter(Transaction.sent.is_(null()))
 
     if ENV == 'sim':
-        logger.info(f"ENV {ENV}")
+        for trx in trxs:
+            # logger.info(f"trx \n{trx}")
+            nbi_simulator(time_=time_,session_=session,trx_=trx)
 
-        trx_.sent = datetime.now()
+    if ENV == 'prod':
+        nbi_processor(time_=time_,session_=session,trxs_=trxs)
 
-        nbi_response = failure_percentage()
-        logger.info(f"nbi_response {nbi_response}")
+    session.commit()
+    session.close()
 
-        if nbi_response:
-            trx_.success = datetime.now()
-        else:
-            trx_.failure = datetime.now()
 
-        session_.commit()
+def main():
+    for time_ in giver_of_times():
+        processor(time_)
+
+
+if __name__ == '__main__':
+    main()
