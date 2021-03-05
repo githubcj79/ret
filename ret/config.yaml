@@ -36,3 +36,18 @@ TERRAIN:
     N_DISTANCE: 5
     TERRAIN_DELTA: 20
     SAMPLES_PERCENTAGE: 95
+
+KAFKA_CLIENT:
+    CLIENT_ID: ret_client
+    KAFKA_BROKER_URL:
+        sim: localhost:9092
+        prod: localhost:9092 # sólo para pruebas
+        # prod: 192.168.99.100:9092 # valor válido
+    MML_TOPIC:
+        sim: test_nbi_mml_simu
+        prod: test_nbi_mml_simu # sólo para pruebas
+        # prod: mml_topic # valor válido
+    RST_TOPIC:
+        sim: test_nbi_res_simu
+        prod: test_nbi_res_simu # sólo para pruebas
+        # prod: rst_topic # valor válido
