@@ -71,14 +71,14 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
         for antenna in antennas:
             if not antenna.enabled:
                 continue
-            logger.info(f"node {antenna.node} deviceno {antenna.deviceno}")
+            logger.debug(f"node {antenna.node} deviceno {antenna.deviceno}")
             trx = session.query(Transaction).filter(
                 and_(Transaction.node==antenna.node,
                     Transaction.deviceno==antenna.deviceno)).first()
             if trx:
                 # si trx anterior no fue exitosa
                 if not trx.success:
-                    logger.info(f"continue: success {trx.success}")
+                    logger.debug(f"continue: success {trx.success}")
                     continue
                 cond_ = delta_percentaje(
                     trx.user_thrp_dl_initial, user_thrp_dl) > MAX_DELTA_USER_THRP_DL_PERCENTAJE
@@ -86,13 +86,13 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
                         trx.traffic_dl_initial, traffic_dl) > MAX_DELTA_TRAFFIC_DL_PERCENTAJE
                 if cond_:
                     # rollback
-                    logger.info(f"rollback")
+                    logger.debug(f"rollback")
                     newtilt_  = trx.oldtilt
                 else:
                     newtilt_ = newtilt(trx.newtilt)
 
                 if trx.newtilt == newtilt_:
-                    logger.info(f"continue: newtilt_ {newtilt_}")
+                    logger.debug(f"continue: newtilt_ {newtilt_}")
                     continue
 
                 # si nuevo tilt es distinto al último
@@ -100,7 +100,7 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
                 trx.generated = datetime.now()
             else:
                 if not (user_avg >= MIN_USER_AVG and user_avg <= MAX_USER_AVG):
-                    logger.info(f"continue: user_avg {user_avg}")
+                    logger.debug(f"continue: user_avg {user_avg}")
                     continue
                 # se crea entrada en tabla transactions
                 trx = Transaction(
@@ -122,7 +122,7 @@ def evaluator(time_=None, candidates_kpis_df=pd.DataFrame()):
                         datetimeid = time_,
                         generated = datetime.now(),
                         )
-                logger.info(f"trx \n{trx}")
+                logger.debug(f"trx \n{trx}")
                 session.add(trx)
             session.commit()
 

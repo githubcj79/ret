@@ -27,7 +27,7 @@ producer = KafkaProducer(
     value_serializer=lambda msg: json.dumps(msg).encode('utf-8'), # we serialize our data to json for efficent transfer
 )
 
-logger.info(f"MML_TOPIC {MML_TOPIC} RST_TOPIC {RST_TOPIC}")
+logger.debug(f"MML_TOPIC {MML_TOPIC} RST_TOPIC {RST_TOPIC}")
 consumer = KafkaConsumer(
     RST_TOPIC,
     bootstrap_servers=[KAFKA_BROKER_URL],
@@ -69,7 +69,7 @@ def nbi_processor(time_=None,session_=None,trxs_=None):
     command_list = []
 
     for trx in trxs_:
-        logger.info(f"trx \n{trx}")
+        logger.debug(f"trx \n{trx}")
         object_id = 14144
         command = (
                     f'MOD RETSUBUNIT:DEVICENO={trx.deviceno},'
@@ -106,16 +106,16 @@ def nbi_processor(time_=None,session_=None,trxs_=None):
 
     event_ = Event(type_='mml_type', data=data)
     id_ = event_.id_
-    logger.info(f"id_ {id_} ENV {ENV}")
+    logger.debug(f"id_ {id_} ENV {ENV}")
 
     producer.send(MML_TOPIC, value=event_.as_dictionary())
-    logger.info(f"after producer.send(MML_TOPIC ..)")
-    logger.info(f"MML_TOPIC {MML_TOPIC}")
+    logger.debug(f"after producer.send(MML_TOPIC ..)")
+    logger.debug(f"MML_TOPIC {MML_TOPIC}")
 
     for m in consumer:
-        logger.info(f"after for m in consumer:")
+        logger.debug(f"after for m in consumer:")
         if id_  == m.value['id_']:
-            logger.info("*** match")
+            logger.debug("*** match")
             # logger.info(f"m.value \n{m.value}")
             pprint.pprint(m.value, indent=0, width=120)
 
