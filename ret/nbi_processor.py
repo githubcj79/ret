@@ -21,6 +21,7 @@ from settings import (
         MML_TOPIC,
         RST_TOPIC,
     )
+from trx_updater import trx_updater
 
 producer = KafkaProducer(
     bootstrap_servers=[KAFKA_BROKER_URL],
@@ -123,6 +124,7 @@ def nbi_processor(time_=None,session_=None,trxs_=None):
             - para cada comando ejecutado, estudiar respuesta y
                 actualizar trxs y rets, si corresponde
             '''
+            trx_updater(commands=m.value['data']['command_list'])
             break
         else:
             print("continue", flush=True)
