@@ -9,6 +9,7 @@ from loguru import logger
 
 import datetime
 import json
+import pprint
 import random
 import time
 
@@ -77,8 +78,8 @@ def nbi_processor(time_=None,session_=None,trxs_=None):
                     # '{'
                     # f'{trx.node}'
                     # '}'
-                    ),
-        network_element = f'{trx.node}',
+                    )
+        network_element = f'{trx.node}'
         dict_ = {
             # 'object_id': object_id, # original
             'object_id': trx.id, # para probar si puedo hilar con la trx
@@ -114,7 +115,10 @@ def nbi_processor(time_=None,session_=None,trxs_=None):
     for m in consumer:
         logger.info(f"after for m in consumer:")
         if id_  == m.value['id_']:
-            print("*** match", flush=True)
+            logger.info("*** match")
+            # logger.info(f"m.value \n{m.value}")
+            pprint.pprint(m.value, indent=0, width=120)
+
             '''
             - para cada comando ejecutado, estudiar respuesta y
                 actualizar trxs y rets, si corresponde
