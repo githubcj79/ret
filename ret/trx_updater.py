@@ -46,7 +46,7 @@ def ret_updater(node=None, deviceno=None, tilt=None, session=None):
     trx.tilt = tilt
     session.commit()
 
-def trx_updater(commands=None):
+def trx_updater(commands=None, sent_=None):
     '''
     Esta función recibe una lista de diccionarios, con las respuestas
     a los comandos de cambio de tilt ejecutados en el NBI.
@@ -73,6 +73,8 @@ def trx_updater(commands=None):
             session.commit()
             session.close()
             return
+
+        trx.sent = sent_
         if result:
             trx.oldtilt = trx.newtilt
             trx.success = executed_time_stamp

@@ -109,6 +109,7 @@ def nbi_processor(time_=None,session_=None,trxs_=None):
     id_ = event_.id_
     logger.debug(f"id_ {id_} ENV {ENV}")
 
+    sent_ = datetime.datetime.now()
     producer.send(MML_TOPIC, value=event_.as_dictionary())
     logger.debug(f"after producer.send(MML_TOPIC ..)")
     logger.debug(f"MML_TOPIC {MML_TOPIC}")
@@ -124,7 +125,7 @@ def nbi_processor(time_=None,session_=None,trxs_=None):
             - para cada comando ejecutado, estudiar respuesta y
                 actualizar trxs y rets, si corresponde
             '''
-            trx_updater(commands=m.value['data']['command_list'])
+            trx_updater(commands=m.value['data']['command_list'], sent_=sent_)
             break
         else:
             print("continue", flush=True)
