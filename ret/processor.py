@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import null
+from sqlalchemy import null, or_
 from loguru import logger
 import pandas as pd
 
@@ -31,7 +31,15 @@ def processor(time_=None):
     session = get_session(engine=engine)
 
     # detectar las transacciones a procesar
-    trxs = session.query(Transaction).filter(Transaction.sent.is_(null()))
+    # trxs = session.query(Transaction).filter(Transaction.sent.is_(null()))
+
+    # trxs = session.query(Transaction).filter(
+    #     or_(Transaction.sent.is_(null()),
+    #         Transaction.oldtilt != Transaction.newtilt)).first()
+
+    trxs = session.query(Transaction).filter(
+        or_(Transaction.sent.is_(null()),
+            Transaction.oldtilt != Transaction.newtilt))
 
     if ENV == 'sim':
         for trx in trxs:

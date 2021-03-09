@@ -47,6 +47,7 @@ def nbi_processor(time_=None,session_=None,trxs_=None):
     actualiza las transacciones en la BD (transactions y rets)
     '''
     logger.debug(f"time_ {time_} ENV {ENV}")
+    # logger.debug(f"trxs_ \n{trxs_} ENV {ENV}")
 
     if not time_ or not session_ or not trxs_:
         return
@@ -91,6 +92,9 @@ def nbi_processor(time_=None,session_=None,trxs_=None):
         }
         command_list.append(dict_)
 
+    logger.debug(f"command_list \n{command_list}")
+    if not command_list:
+        return
 
     random_script_id = str(random.randint(0, 1e6)).zfill(6)+\
                         ' '+datetime.datetime.now().strftime('%Y%m%d%H%M%S')
